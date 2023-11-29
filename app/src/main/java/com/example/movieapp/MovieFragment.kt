@@ -31,10 +31,9 @@ class MovieFragment : Fragment() {
 
         movieViewModel.getMovies().observe(
             viewLifecycleOwner,
-            { movies ->
-                movieAdapter.submitList(movies)
-            },
-        )
+        ) { movies ->
+            movieAdapter.submitList(movies)
+        }
 
         return view
 
