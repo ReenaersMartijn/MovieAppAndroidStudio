@@ -26,6 +26,13 @@ class MainFragment : Fragment() {
             val action = MainFragmentDirections.actionMainFragmentToLogInFragment()
             Navigation.findNavController(it).navigate(action)
         }
+        binding.MovieButton.setOnClickListener {
+
+            val action = MainFragmentDirections.actionMainFragmentToMovieFragment()
+            Navigation.findNavController(it).navigate(action)
+
+        }
+
 
         return binding.root
     }

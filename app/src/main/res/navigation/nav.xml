@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_mainFragment_to_logInFragment2"
             app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -40,4 +43,8 @@
             android:id="@+id/action_signUpFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/movieFragment"
+        android:name="com.example.movieapp.MovieFragment"
+        android:label="MovieFragment" />
 </navigation>
