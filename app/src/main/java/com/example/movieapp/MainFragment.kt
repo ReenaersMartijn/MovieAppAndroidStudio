@@ -30,10 +30,7 @@ class MainFragment : Fragment() {
 
             val action = MainFragmentDirections.actionMainFragmentToMovieFragment()
             Navigation.findNavController(it).navigate(action)
-
         }
-
-
         return binding.root
     }
 }

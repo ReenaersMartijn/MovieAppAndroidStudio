@@ -9,32 +9,49 @@ import com.google.firebase.database.*
 class MovieViewModel : ViewModel() {
 
     private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Movies")
-    private val moviesLiveData: MutableLiveData<List<Movie>> = MutableLiveData()
+    private val moviesLiveData: MutableLiveData<List<Movie>?> = MutableLiveData()
+    private val originalMoviesList: MutableList<Movie> = mutableListOf()
 
-    fun getMovies(): MutableLiveData<List<Movie>> {
+    init {
+        fetchMovies()
+    }
+
+    fun getMovies(): MutableLiveData<List<Movie>?> {
+        return moviesLiveData
+    }
+
+    private fun fetchMovies() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                originalMoviesList.clear()
                 val moviesList: MutableList<Movie> = mutableListOf()
 
                 for (snapshot in dataSnapshot.children) {
                     val movie = snapshot.getValue(Movie::class.java)
-                    movie?.let { moviesList.add(it) }
+                    movie?.let {
+                        moviesList.add(it)
+                        originalMoviesList.add(it)
+                    }
                 }
 
                 moviesLiveData.value = moviesList
-                Log.d("MovieViewModel", "Retrieved movies: $moviesList") // Logging the retrieved movies
+                Log.d("MovieViewModel", "Retrieved movies: $moviesList")
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.e("MovieViewModel", "Error fetching movies: ${databaseError.message}")
-                // Notify observers of an error or handle it as required
-                null.also { moviesLiveData.value = it } // or handle errors using a custom error state
+                moviesLiveData.value = null
             }
-
         })
+    }
 
-        return moviesLiveData
+    fun searchMovies(query: String) {
+        val filteredList = originalMoviesList.filter { movie ->
+            movie.Title?.contains(query, ignoreCase = true) ?: false
+        }
+        moviesLiveData.value = filteredList
     }
 }
+
 
 

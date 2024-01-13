@@ -46,5 +46,21 @@
     <fragment
         android:id="@+id/movieFragment"
         android:name="com.example.movieapp.MovieFragment"
-        android:label="MovieFragment" />
+        android:label="MovieFragment" >
+        <action
+            android:id="@+id/action_movieFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailFragment"
+        android:name="com.example.movieapp.MovieDetailFragment"
+        android:label="fragment_movie_detail"
+        tools:layout="@layout/fragment_movie_detail" >
+        <argument
+            android:name="movieTitle"
+            app:argType="string" />
+        <argument
+            android:name="movieImageURL"
+            app:argType="string" />
+    </fragment>
 </navigation>
