@@ -19,9 +19,7 @@ class MovieDetailFragment : Fragment() {
     private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
 
-
     private lateinit var movieDetailsViewModel: DetailsViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +32,6 @@ class MovieDetailFragment : Fragment() {
 
         val args = MovieDetailFragmentArgs.fromBundle(requireArguments())
 
-        // Extract movie details from args
         val movieId = args.movieId
 
         val userId = args.userId
@@ -51,7 +48,6 @@ class MovieDetailFragment : Fragment() {
             movie?.Image?.let { imageUrl ->
                 Picasso.get().load(imageUrl).into(binding.movieDetailImage)
 
-
             }
         }
 
@@ -63,11 +59,7 @@ class MovieDetailFragment : Fragment() {
             val action = MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieFragment(userId)
             Navigation.findNavController(it).navigate(action)
         }
-/*
-        // Use movie details as needed
-        binding.movieDetailTitle.text = movieTitle
-        Picasso.get().load(movieImageURL).into(binding.movieDetailImage)
-*/
+
         return view
     }
 

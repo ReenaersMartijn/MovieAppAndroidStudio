@@ -17,7 +17,7 @@ class MapsViewModel : ViewModel() {
     private val cinemaLocationsLiveData: MutableLiveData<List<LatLng>> = MutableLiveData()
     private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Cinemas")
 
-    // Make the method public
+
     fun fetchCinemaLocations() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -38,13 +38,12 @@ class MapsViewModel : ViewModel() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle the error
+
                 cinemaLocationsLiveData.value = emptyList() // or handle differently based on your use case
             }
         })
     }
 
-    // Get live data of cinema locations
     fun getCinemaLocations(): LiveData<List<LatLng>> {
         return cinemaLocationsLiveData
     }

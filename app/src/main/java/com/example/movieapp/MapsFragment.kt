@@ -33,9 +33,8 @@ class MapsFragment : Fragment() {
     private val callback = OnMapReadyCallback { map ->
         googleMap = map
 
-        // Observe cinema locations
         mapsViewModel.getCinemaLocations().observe(viewLifecycleOwner) { cinemaLocations ->
-            // Clear existing markers
+
             googleMap?.clear()
 
             // Add markers for cinema locations
@@ -49,16 +48,16 @@ class MapsFragment : Fragment() {
             }
         }
 
-        // Get and show the user's last known location
+
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Permission already granted, get and show the last known location
+
             getAndShowLastLocation()
         } else {
-            // Request location permission
+
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
@@ -103,7 +102,6 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get closest cinema on button click
         binding.FindClosestCinemaButton.setOnClickListener {
             getClosestCinema()
         }

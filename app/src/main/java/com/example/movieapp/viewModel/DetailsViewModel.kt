@@ -17,13 +17,11 @@ class DetailsViewModel : ViewModel() {
     private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Movies")
     private val moviesLiveData: MutableLiveData<List<Movie>?> = MutableLiveData()
     private val originalMoviesList: MutableList<Movie> = mutableListOf()
-    private val db = FirebaseFirestore.getInstance()
 
     fun likeMovie(movieId: Int, userId: String, title: String) {
         val db = FirebaseFirestore.getInstance()
         val likeCollection = db.collection("Likes")
 
-        // Check if the user has already liked the movie
         likeCollection
             .whereEqualTo("userId", userId)
             .whereEqualTo("movieId", movieId)
@@ -63,7 +61,6 @@ class DetailsViewModel : ViewModel() {
                 moviesLiveData.value = moviesList
                 Log.d("DetailsViewModel", "Retrieved movies: $moviesList")
 
-                // Find the movie with the specified ID
                 val selectedMovie = moviesList.find { it.Id == movieId }
 
                 callback(selectedMovie)

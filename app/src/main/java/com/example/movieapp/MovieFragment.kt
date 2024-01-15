@@ -48,7 +48,7 @@ class MovieFragment : Fragment() {
         }
 
         movieAdapter.setOnItemClickListener { movie ->
-            // Navigate to MovieDetailFragment with movie details
+
             val action = MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
                 movie.Id,
                 userId
