@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.example.movieapp.models.User
+import com.google.firebase.ktx.Firebase
 
 class LogInFragment : Fragment() {
     private lateinit var binding: FragmentLogInBinding
@@ -23,19 +25,20 @@ class LogInFragment : Fragment() {
         binding = FragmentLogInBinding.inflate(inflater, container, false)
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.textView.setOnClickListener {
+        binding.SignUpText.setOnClickListener {
             val action = LogInFragmentDirections.actionLogInFragmentToSignUpFragment()
             Navigation.findNavController(it).navigate(action)
         }
 
-        binding.button.setOnClickListener {
+        binding.SignInButton.setOnClickListener {
             val email = binding.emailEt.text.toString()
             val pass = binding.passET.text.toString()
 
             if (email.isNotEmpty() && pass.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val action = LogInFragmentDirections.actionLogInFragmentToMainFragment()
+                        var user = firebaseAuth.currentUser
+                        val action = LogInFragmentDirections.actionLogInFragmentToMovieFragment(user?.uid.toString())
                         Navigation.findNavController(requireView()).navigate(action)
 
                     } else {
@@ -50,11 +53,4 @@ class LogInFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (firebaseAuth.currentUser != null) {
-            val action = LogInFragmentDirections.actionLogInFragmentToMainFragment()
-            Navigation.findNavController(requireView()).navigate(action)
-        }
-    }
 }

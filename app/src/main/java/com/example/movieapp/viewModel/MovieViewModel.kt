@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.movieapp.models.Movie
+import com.example.movieapp.models.User
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class MovieViewModel : ViewModel() {
 
@@ -51,6 +54,7 @@ class MovieViewModel : ViewModel() {
         }
         moviesLiveData.value = filteredList
     }
+
 }
 
 

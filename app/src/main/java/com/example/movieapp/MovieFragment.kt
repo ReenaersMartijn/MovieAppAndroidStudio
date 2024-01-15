@@ -1,5 +1,5 @@
 package com.example.movieapp
-import com.example.movieapp.adapter.MovieAdapter
+import MovieAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieapp.databinding.FragmentMovieBinding
 import com.example.movieapp.viewModel.MovieViewModel
 
 class MovieFragment : Fragment() {
@@ -19,14 +21,21 @@ class MovieFragment : Fragment() {
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var movieAdapter: MovieAdapter
 
+    private var _binding: FragmentMovieBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_movie, container, false)
+
+        _binding = FragmentMovieBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         movieViewModel = ViewModelProvider(this).get(MovieViewModel::class.java)
         movieAdapter = MovieAdapter()
+
+        val args = MovieFragmentArgs.fromBundle(requireArguments())
+        val userId = args.id
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewMovies)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -37,6 +46,17 @@ class MovieFragment : Fragment() {
         ) { movies ->
             movieAdapter.submitList(movies)
         }
+
+        movieAdapter.setOnItemClickListener { movie ->
+            // Navigate to MovieDetailFragment with movie details
+            val action = MovieFragmentDirections.actionMovieFragmentToMovieDetailFragment(
+                movie.Id,
+                userId
+
+            )
+            findNavController().navigate(action)
+        }
+
 
         val searchBar: EditText = view.findViewById(R.id.searchBar)
         searchBar.addTextChangedListener(object : TextWatcher {
@@ -58,6 +78,16 @@ class MovieFragment : Fragment() {
             if (destination.id == R.id.movieDetailFragment) {
                 // Handle any detail fragment-specific logic here
             }
+        }
+        binding.ProfileButton.setOnClickListener {
+
+            val action = MovieFragmentDirections.actionMovieFragmentToProfileFragment(userId)
+            Navigation.findNavController(it).navigate(action)
+        }
+        binding.MapButton.setOnClickListener {
+
+            val action = MovieFragmentDirections.actionMovieFragmentToMapsFragment(userId)
+            Navigation.findNavController(it).navigate(action)
         }
 
         return view

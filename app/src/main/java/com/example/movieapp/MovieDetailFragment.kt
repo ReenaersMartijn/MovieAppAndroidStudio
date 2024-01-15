@@ -1,55 +1,75 @@
 package com.example.movieapp
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
+import com.example.movieapp.databinding.FragmentMovieDetailBinding
+import com.example.movieapp.viewModel.DetailsViewModel
+import com.example.movieapp.viewModel.MovieViewModel
+import com.squareup.picasso.Picasso
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieDetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class MovieDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+    private var _binding: FragmentMovieDetailBinding? = null
+    private val binding get() = _binding!!
+
+
+    private lateinit var movieDetailsViewModel: DetailsViewModel
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentMovieDetailBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        movieDetailsViewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
+
+        val args = MovieDetailFragmentArgs.fromBundle(requireArguments())
+
+        // Extract movie details from args
+        val movieId = args.movieId
+
+        val userId = args.userId
+
+        var title = ""
+
+        movieDetailsViewModel.getMovie(movieId) { movie ->
+            binding.movieDetailTitle.text = movie?.Title
+
+            binding.categories.text = movie?.Categories
+
+            title = movie?.Title.toString()
+            // Load movie image using Picasso
+            movie?.Image?.let { imageUrl ->
+                Picasso.get().load(imageUrl).into(binding.movieDetailImage)
+
+
+            }
         }
+
+        binding.LikeButton.setOnClickListener {
+            movieDetailsViewModel.likeMovie(movieId, userId, title)
+        }
+
+        binding.GoBackButton.setOnClickListener {
+            val action = MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieFragment(userId)
+            Navigation.findNavController(it).navigate(action)
+        }
+/*
+        // Use movie details as needed
+        binding.movieDetailTitle.text = movieTitle
+        Picasso.get().load(movieImageURL).into(binding.movieDetailImage)
+*/
+        return view
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie_detail, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MovieDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic fun newInstance(param1: String, param2: String) =
-                MovieDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
 }
