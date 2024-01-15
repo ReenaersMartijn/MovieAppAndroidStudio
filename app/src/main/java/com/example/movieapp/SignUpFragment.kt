@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.example.movieapp.databinding.FragmentProfileBinding
 import com.example.movieapp.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 
 class SignUpFragment : Fragment() {
-    private lateinit var binding: FragmentSignUpBinding
+    private var _binding: FragmentSignUpBinding? = null
+    private val binding get() = _binding!!
     private lateinit var firebaseAuth: FirebaseAuth
     private val firestore = FirebaseFirestore.getInstance()
 
@@ -21,7 +23,8 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        val view = binding.root
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.SignUpTextS.setOnClickListener {
@@ -69,6 +72,6 @@ class SignUpFragment : Fragment() {
             }
         }
 
-        return binding.root
+        return view
     }
 }
